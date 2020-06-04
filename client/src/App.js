@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Route, Switch } from 'react-router-dom';
-import MoveList from './Movies/MovieList';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
+import MovieList from './Movies/MovieList';
 import Movie from './Movies/Movie';
 
 import SavedList from './Movies/SavedList';
@@ -11,7 +11,7 @@ const App = () => {
   const [movieList, setMovieList] = useState([]);
 
   useEffect(() => {
-    const getMovies = () => {
+    const getMovies = props => {
       axios
         .get('http://localhost:5000/api/movies')
         .then(response => {
@@ -33,10 +33,8 @@ const App = () => {
     <div>
       <SavedList list={savedList} />
       <div>
-      <Switch>
-        <Route path='/movies/:itemId' render={props => <Movie {...props} items={movieList} />} />
-        <Route path='/' component={MoveList} />
-      </Switch>
+        <Route path='/movies/:id'><Movie movies={movieList} addToSavedList={addToSavedList} /></Route>
+        <Route path='/'><MovieList movies={movieList}/></Route>
       </div>
     </div>
   );
